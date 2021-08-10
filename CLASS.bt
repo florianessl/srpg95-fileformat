@@ -1,0 +1,49 @@
+
+struct CLASS {
+    char name[20];
+    char zero_padding_0[12];
+
+    int mvmnt_speed;
+    int mvmnt_type;         //0 = Walking, 1 = Flying, 2 = Special
+    int mvmnt_rules[70];    //these apply if mvmnt_type eq Special
+
+    int img_no;
+
+    //Animations
+    int anim_weapon_type_A;
+    int anim_weapon_type_B;
+    int anim_weapon_type_C;
+    int anim_no_weapon;
+    int anim_use_magic_on_enemy;
+    int anim_use_magic_on_ally;
+
+    char unk1_0[72];
+   
+    //Class Base Stats
+    int stat_power;
+    int stat_intel;
+    int stat_skill;
+    int stat_stamina;
+
+    //Magical Abilities learned
+    int magic_lvls[20];
+    int magic_ids[20];
+
+    //Weaknesses
+    byte weak_A;
+    byte weak_B;
+    byte weak_C;
+    byte weak_D;
+    byte weak_E;
+    byte weak_F;
+
+    char unk2_0[2];
+    
+    //Immunities
+    byte resists_poison;
+    byte resists_sleep;
+    byte resists_atkdwn;
+    byte resists_defdwn;
+
+    char unk3_0[32];
+} class[150];

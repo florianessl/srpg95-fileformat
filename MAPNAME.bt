@@ -1,0 +1,5 @@
+
+struct MAPNAME {
+    char name[20];
+    char zero_padding_0[12];
+} mapname[100];

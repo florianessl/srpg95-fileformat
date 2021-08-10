@@ -1,0 +1,45 @@
+
+struct MAGIC {
+    char name[20];
+    char zero_padding_0[12];
+
+    int type;               // 0-2 -> Damage, Degrade Status, Raise Status
+    int mp_cost;
+
+    char desc[70];
+    char unk1_0[2];
+
+    char unk2_0[8];
+    int dmg_damage;
+    int dmg_accuracy;
+    char unk3_0[8];
+    byte dmg_elem_A;
+    byte dmg_elem_B;
+    byte dmg_elem_C;
+    byte dmg_elem_D;
+    byte dmg_elem_E;
+    byte dmg_elem_F;
+    char unk4_0[2];
+
+    int animation;
+    int degrade_expgain;
+    int degrade_effect;     // 0-3 -> Poison, Sleep, Attack Down, Defense Down
+    int target;             // 0 = Any Unit, 1 = Enemy
+    int power;              //Used for both Degrade & Raise Status
+    int relation;           //Used for both Degrade & Raise Status
+    int raise_effect;       //0-5 -> Raise HP, Raise Attack, Raise Defense, 
+                            //       Detox Poison, Recovery, Add Turn
+
+    char unk5_0[60];
+
+    int range_apply_to_entire_map;
+    int area_apply_to_entire_map;
+
+    //2 Bitmaps, each 4 bytes represent one line
+    //([highest to lowest] byte 1 is empty, then byte 4, 3, 2 follow for each part).
+    //HSB of a byte corresponds to the left-most dot of the line part.
+    int range_bitmap[21]; 
+    int area_bitmap[21];
+
+    char unk6_0[72];
+} magic[100];

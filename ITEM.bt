@@ -1,0 +1,92 @@
+
+
+struct ITEM {
+    char name[20];
+    char zero_padding_0[12];
+    
+    int type; //0-7 -> Special, Weapon, Armor, Other, Medicinal, Status, Class, Magic
+    int cost;
+    char desc[70];
+
+    char unk1_0[10];
+
+    byte class_usage[150];
+
+    char unk2_0[50];
+
+    //Weapon stats
+    int wpn_range;
+    int wpn_power;
+    int wpn_useability;
+    int wpn_critical_value;
+    int wpn_animation;
+    
+    byte wpn_elem_A;
+    byte wpn_elem_B;
+    byte wpn_elem_C;
+    byte wpn_elem_D;
+    byte wpn_elem_E;
+    byte wpn_elem_F;
+    char zero1[2];
+
+    //Armor stats
+    int arm_phys_def;
+    int arm_magic_def;
+    int arm_crit_avoid;
+    int arm_weight;
+
+    byte arm_elem_A;
+    byte arm_elem_B;
+    byte arm_elem_C;
+    byte arm_elem_D;
+    byte arm_elem_E;
+    byte arm_elem_F;
+    char zero2[2];
+
+    //"Other" stats
+    int oth_change_power;
+    int oth_change_intel;
+    int oth_change_skill;
+    int oth_change_stamina;
+    int oth_change_speed;
+    int oth_change_growth;
+
+    //Medicinal stats
+    int med_hp_recovery;
+    int med_mp_recovery;
+    int med_phys_def_up;
+    int med_magic_def_up;
+
+    //"Status" stats
+    int stat_raise_maxhp;
+    int stat_raise_maxmp;
+    int stat_raise_powerr;
+    int stat_raise_intel;
+    int stat_raise_skill;
+    int stat_raise_stamina;
+
+    int cls_change_before[20];
+    int cls_change_after[20];
+
+    byte med_heal_poison;
+    byte med_heal_sleep;
+    byte med_heal_atkdown;
+    byte med_heal_defdown;
+
+    char unk3_0[4];
+
+    byte oth_safe_poison;
+    byte oth_safe_sleep;
+    byte oth_safe_atkdown;
+    byte oth_safe_defdown;
+
+    char unk4_0[4];
+
+    int cls_lvl_require;
+    int med_range;
+    int mgc_magic;
+
+    char unk5_0[16];
+
+
+} item[100];

@@ -1,0 +1,177 @@
+
+
+typedef struct Character {
+
+    int unk_int1;
+    int is_alive;
+
+    int played_this_turn;       //has already moved
+    int is_foe;
+    int unk_int3;
+    int pos_x;
+    int pos_y;
+    int incremential_id;
+
+    int unit_id;
+    int class_id;
+    int level;
+    int exp;
+    int unk_int4;
+    int unk_int5;
+    int unk_int6;
+    int controlled_by_cpu;
+    int npc_must_stay_alive;
+    int unk_int7;
+    int unk_int8;
+    int walk_speed;
+
+    int hp_max;
+    int mp_max;
+    int strength_affected;
+    int magic_power_affected;
+    int agility_affected;
+    int stamina_affected;
+    int hp_current;
+    int mp_current;
+
+    int strength_base;
+    int magic_power_base;
+    int agility_base;
+    int stamina_base;
+
+    int attack_power;
+    int attack_speed;
+    int def_phys;
+    int def_magic;
+
+    int unk_int9;
+    int unk_int10;
+    int unk_int11;
+    int unk_int12;
+
+    int item_weapon;
+    int item_armor;
+    int item_other;
+
+    int unk_int13;
+    int unk_int14;
+    int stat_poison_rounds;
+    int stat_sleep_rounds;
+    int stat_atkdown_rounds;
+    int stat_defdown_rounds;
+
+    //TODO: Several of these are set after movement. Still have to figure them out
+    int unk_int15;
+    int mvmnt_unused;   //after movement, how many steps were unused
+    int unk_int16;
+    int unk_int17;
+    int unk_int18;
+    int prev_pos_x;     //only set if the character has already moved
+    int prev_pos_y;     //only set if the character has already moved
+    int unk_int19;
+    int unk_int20;
+    int unk_int21;
+    int unk_int22;
+
+    int mvmnt_rules[70];
+    int magic_learned[20];
+    int count_magic_learned;
+
+    char unk2_0[36];
+};
+
+typedef struct ItemHeld {
+    int item_id;
+    int count;
+};
+
+//same type as in SMAP.bt
+typedef struct MovementPattern {
+    short condition;
+    short movement_type; //0-3 -> Rush, Wait, Specific, None
+    short location_X;
+    short location_Y;
+    short switch_to_apply;
+};
+
+//same type as in SMAP.bt
+typedef struct ObjEventCondition {
+    short type;  //Values can mean different things (depends on event_type)
+    short switch_;
+    short turn;  //odd: Ally turn, even: Enemy turn 
+                        //to get the turn count:
+                        // if Ally (odd): add 1, then divide by 2
+                        // if Enemy (even): divide by 2
+    short unit;
+};
+
+//same type as in SMAP.bt
+typedef struct Object {
+    int is_active;
+
+    int pos_x;
+    int pos_y;
+
+    int obj_type;
+    short switch_condition;
+    char unk1_0[2];
+    int unit;
+
+    int other_tile;
+
+    MovementPattern mp_A;
+    MovementPattern mp_B;
+    MovementPattern mp_C;
+    MovementPattern mp_D;
+
+    int enemy_boss;
+    int player_guest;
+    int enemy_item;
+    int enemy_gold;
+
+    ObjEventCondition cond_1;
+    ObjEventCondition cond_2;
+    ObjEventCondition cond_3;
+    ObjEventCondition cond_4;
+    ObjEventCondition cond_5;
+
+    char unk2_0[36];
+    int neutral_healer;
+} object_ <optimize=false>;
+
+struct SAVE {
+    int in_camp;
+    int unk_int2;   //I think this one increments with each map change
+    int unk_int3;
+    int unk_int4;
+    int map_id;
+    byte switches[500];
+
+    int unk_int5;
+    int turn_no;    //counts Ally & Enemy turns
+    ItemHeld items[100];
+
+    int unk_int6;
+    int gold;
+    int fighters_count;
+    
+
+    char bgm[48];
+    
+    int colortint_red;
+    int colortint_green;
+    int colortint_blue;
+    int colortint_chroma;
+    int unk_int11;
+    
+    char unk3_0[92];
+    short variables[200];
+
+    char unk4_0[740];
+
+    Character characters[99];
+
+    char unk5_0[32164];
+
+    Object objects[99];
+} save;

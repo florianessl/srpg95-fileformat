@@ -1,0 +1,33 @@
+
+struct UNIT {
+    char name[20];
+    char zero_padding_0[12];
+
+    int face;           //index starts at 1
+    int class;
+    int level;
+    int exp;
+
+    //Stats
+    int hp_start;
+    int mp_start;
+    int power_start;
+    int intel_start;
+    int skill_start;      
+    int stamina_start;
+    int hp_growth;
+    int mp_growth;
+    int power_growth;
+    int intel_growth;
+    int skill_growth;
+    int stamina_growth;
+
+    //Equipped
+    int eqp_weapon;     //-1 = None
+    int eqp_armor;      //-1 = None
+    int eqp_other;      //-1 = None
+
+    char death_message[72];
+
+    char unk_0[300];
+} unit[250];

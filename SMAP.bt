@@ -1,0 +1,219 @@
+
+//same type as in SAVE.bt
+typedef struct MovementPattern {
+    short condition;
+    short movement_type;  //0-3 -> Rush, Wait, Specific, None
+    short location_X;
+    short location_Y;
+    short switch_to_apply;
+};
+
+//same type as in SAVE.bt
+typedef struct ObjEventCondition {
+    short type;  //Values can mean different things (depends on event_type)
+    short switch_;
+    short turn;  //odd: Ally turn, even: Enemy turn 
+                        //to get the turn count:
+                        // if Ally (odd): add 1, then divide by 2
+                        // if Enemy (even): divide by 2
+    short unit;
+};
+
+//same type as in SAVE.bt
+typedef struct Object {
+    int is_active;
+
+    int pos_x;
+    int pos_y;
+
+    int obj_type;
+    short switch_condition;
+    char unk1_0[2];
+    int unit;
+
+    int other_tile;
+
+    MovementPattern mp_A;
+    MovementPattern mp_B;
+    MovementPattern mp_C;
+    MovementPattern mp_D;
+
+    int enemy_boss;
+    int player_guest;
+    int enemy_item;
+    int enemy_gold;
+
+    ObjEventCondition cond_1;
+    ObjEventCondition cond_2;
+    ObjEventCondition cond_3;
+    ObjEventCondition cond_4;
+    ObjEventCondition cond_5;
+
+    char unk2_0[36];
+    int neutral_healer;
+} object_ <optimize=false>;
+
+typedef struct EventDeclaration {
+    char internal_name[8];
+    int first_chunk;    //This * 100 will calculate the adress for the event data
+    int length_data; //The length of an event will be padded to the next 100 
+                     // (e.g. 115 -> actually takes 200 bytes of space)
+                     //TODO: this isn't always the case, what the..?
+} eventdeclaration_ <optimize=false>;
+
+
+
+typedef struct EventCommand {
+    byte command_id;
+    short length;
+    byte zero;
+
+    byte command_data[500]; //Fixed size array since Binary Template scripting is a little bit limited
+} eventcommand_ <optimize=false>;
+
+
+typedef struct Event {
+    char event_name[36];
+    char zero_padding_0[64];
+
+    uint length_commands; //length in bytes
+    int count_commands;
+    local EventCommand commands[5000]; //Fixed size array since Binary Template scripting is a little bit limited
+    
+} event_ <optimize=false>;
+
+byte[] ReadEventData(int ev_chunks[], int pos, int padded_size, int current_chunk_pos) {
+    local byte eventData[padded_size];
+    local int i = 0; j = 0;
+
+    while (current_chunk_pos != -2) {
+        for (j = 0; j < 100; j++) {
+            FSeek(pos + current_chunk_pos * 100 + j);
+            eventData[i * 100 + j] = ReadByte();
+        }
+        current_chunk_pos = ev_chunks[current_chunk_pos];
+        Printf(" Curr Chunk Pos: %d\n", current_chunk_pos);
+        i++;
+    }
+
+    return eventData;
+}
+
+struct SMAP {
+    char name[20];
+    char zero_padding_0[12];
+
+    int width;
+    int height;
+    int tileset;
+    int winCondition;
+
+    char music_camp[48];
+    char music_player_turn[48];
+    char music_enemy_turn[48];
+    char music_player_battle[48];
+    char music_enemy_battle[48];
+    char music_boss_battle[48];
+    char music_map_complete[48];
+    char music_game_over[48];
+
+    int camp_before_battle;
+    int camp_shop_items[100];
+    int count_shop_items;
+
+    int count_prev_character;
+    int prev_character_startpos_x[20]; //only 15 are used
+    int prev_character_startpos_y[20]; //only 15 are used
+
+    int important_characters[15];
+    char unk1_0[20];
+    int count_important_characters;
+    
+    int camp_background;
+    int unk_int;
+    char unk2_0[8];
+    int camp_allow_party_change;
+    char unk3_0[80];
+
+    //Always 40*40 (maximum), even if a smaller map size has been chosen
+    //TODO: figure out, how to map these values to tileset data
+    short map_data[1600];
+
+    char unk4_0[176];
+
+    Object objects[99];
+
+    int ev_chunks[5000]; //stores event chunk adresses. event data is split into chunks of 100 bytes.
+
+    local int pos<hidden=true>;
+    pos = FTell();
+    local int count_ev_declarations<hidden=true>;
+    count_ev_declarations = 0;
+
+    while ( ReadByte() != 0) {
+        count_ev_declarations++;
+        FSeek(FTell() + 16);        
+    }
+    FSeek(pos);
+
+    EventDeclaration ev_declarations[5000];
+
+    //This marks the end of the static part of the format
+    pos = FTell();
+
+    local int i <hidden=true>, j<hidden=true>;
+    local int padded_size <hidden=true>, 
+              current_chunk_pos <hidden=true>;
+    i = 0;
+
+    local Event events[count_ev_declarations];
+    local byte eventData[];
+    local int bytesRead <hidden=true>;
+
+    while (ev_declarations[i].internal_name[0] != 0) {
+        current_chunk_pos = ev_declarations[i].first_chunk;
+        Printf("Parsing Chunked Event Data\n");
+        padded_size = ev_declarations[i].length_data + (100 - ev_declarations[i].length_data % 100);
+
+        Printf("First Chunk Position: %d\n", current_chunk_pos);
+        Printf("Length: %d \n", ev_declarations[i].length_data);
+        Printf("Padded data size: %d\n", padded_size);
+        
+        eventData = ReadEventData(ev_chunks, pos, padded_size, current_chunk_pos);
+        bytesRead = 0;
+        for (j = 0; j < 36; j++)
+            events[i].event_name[j] = eventData[j];
+        bytesRead = 36;
+        for (j = 0; j < 64; j++)
+            events[i].zero_padding_0[j] = eventData[bytesRead + j];
+        bytesRead += 64;
+
+        events[i].length_commands = ((uint)eventData[bytesRead + 1]) << 8;
+        events[i].length_commands += ((ubyte)eventData[bytesRead]);
+
+        bytesRead += 4;
+        events[i].count_commands = 0;
+
+        Printf("Event name: %s\n", events[i].event_name);
+
+        while ( bytesRead < ev_declarations[i].length_data) {
+            events[i].commands[events[i].count_commands].command_id = eventData[bytesRead];
+            events[i].commands[events[i].count_commands].length = ((ushort)eventData[bytesRead + 2]) << 8;
+            events[i].commands[events[i].count_commands].length += ((ubyte)eventData[bytesRead + 1]);
+
+            for (j = 0; j < events[i].commands[events[i].count_commands].length; j++) {
+                events[i].commands[events[i].count_commands].command_data[j] = eventData[bytesRead + 4 + j];
+            }
+
+            //Not part of this binary template: parsing the EventCommand data
+
+            bytesRead += events[i].commands[events[i].count_commands].length + 4;
+            events[i].count_commands++;    
+        }
+
+        Printf("\n");
+
+        i++;
+    }
+
+} smap <optimize=false>;
