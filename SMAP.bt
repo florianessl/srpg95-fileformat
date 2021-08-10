@@ -57,7 +57,7 @@ typedef struct Object {
 
 typedef struct EventDeclaration {
     char internal_name[8];
-    int first_chunk;    //This * 100 will calculate the adress for the event data
+    int first_chunk;
     int length_data; //The length of an event will be padded to the next 100 
                      // (e.g. 115 -> actually takes 200 bytes of space)
 } eventdeclaration_ <optimize=false>;
