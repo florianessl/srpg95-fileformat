@@ -145,7 +145,7 @@ struct SAVE {
     int unk_int3;
     int unk_int4;
     int map_id;
-    byte switches[500];
+    byte switches[500]; //Yup, one byte for each switch
 
     int unk_int5;
     int turn_no;    //counts Ally & Enemy turns

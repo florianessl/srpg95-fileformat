@@ -1,4 +1,6 @@
 
+//TODO: document the different types of EventCommands and their arguments
+
 //same type as in SAVE.bt
 typedef struct MovementPattern {
     short condition;
@@ -58,7 +60,6 @@ typedef struct EventDeclaration {
     int first_chunk;    //This * 100 will calculate the adress for the event data
     int length_data; //The length of an event will be padded to the next 100 
                      // (e.g. 115 -> actually takes 200 bytes of space)
-                     //TODO: this isn't always the case, what the..?
 } eventdeclaration_ <optimize=false>;
 
 
