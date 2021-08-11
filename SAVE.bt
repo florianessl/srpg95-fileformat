@@ -98,20 +98,19 @@ typedef struct ItemHeld {
     int count;
 };
 
-//SAVE%d.DAT
-struct SAVE {
+typedef struct GameData {
     int in_camp;
     int map_id;         //zero-index
-    int unk_int3;       //my theory is, that these two values correspond to
-    int unk_int4;       // camera movement. (not saved) TODO: need to check in-memory
+    int screen_offset_x;
+    int screen_offset_y;
     int next_map_id;
     byte switches[500]; //Yup, one byte for each switch
 
     int unk_int5;
-    int turn_no;    //counts Ally & Enemy turns
+    int turn_no;        //counts Ally & Enemy turns
     ItemHeld items[100];
 
-    int unk_int6;
+    int item_count_total;
     int gold;
     int player_unit_count;
 
@@ -127,7 +126,11 @@ struct SAVE {
     short variables[200];
 
     char unk4_0[100];
-    //end of 1st buffer
+};
+
+//SAVE%d.DAT
+struct SAVE {
+    GameData game_data;
     //0007D0
 
     //2nd buffer
