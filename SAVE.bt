@@ -13,7 +13,7 @@
 
 #include "ObjectData.inc.bt"
 
-typedef struct Character {
+typedef struct Unit {
 
     int is_active;
     int is_alive;
@@ -31,7 +31,7 @@ typedef struct Character {
     int exp;
     int unk_int4;
     int unk_int5;
-    int unk_int6;
+    int count_held_items;
     int controlled_by_cpu;
     int npc_must_stay_alive;
     int unk_int7;
@@ -98,19 +98,13 @@ typedef struct ItemHeld {
     int count;
 };
 
-typedef struct UnknownCharacterData {
-    char data1[52];
-    int unk_bool;
-    char data[584];
-};
-
 //SAVE%d.DAT
 struct SAVE {
     int in_camp;
-    int map_id;   //zero-index
-    int unk_int3;
-    int unk_int4;
-    int map_id2;  //not zero-index
+    int map_id;         //zero-index
+    int unk_int3;       //my theory is, that these two values correspond to
+    int unk_int4;       // camera movement. (not saved) TODO: need to check in-memory
+    int next_map_id;
     byte switches[500]; //Yup, one byte for each switch
 
     int unk_int5;
@@ -119,7 +113,7 @@ struct SAVE {
 
     int unk_int6;
     int gold;
-    int fighters_count;
+    int player_unit_count;
 
     char bgm[48];
     
@@ -137,11 +131,11 @@ struct SAVE {
     //0007D0
 
     //2nd buffer
-    Character characters[100]; //first one is always empty (base 1 index)
+    Unit field_units[100]; //first one is always empty (base 1 index)
     //0101D0
 
     //3rd buffer
-    UnknownCharacterData unk5[50];
+    Unit player_units[50];
     //17EC0
 
     //4th buffer

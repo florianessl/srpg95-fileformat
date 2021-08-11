@@ -100,9 +100,8 @@ struct SMAP {
     //Always 40*40 (maximum), even if a smaller map size has been chosen
     short map_data[1600];
 
-    char unk4_0[176];
-
-    Object objects[99];
+    char unk4_0[12];
+    Object objects[100]; //first one is always empty (base 1 index)
     
     //Stores event chunk adresses. event data is split into chunks of 100 bytes.
     int ev_chunks[5000]; 
