@@ -1,16 +1,38 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: ITEM.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: ITEM.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
 
+enum <int> ItemType {
+    SPECIAL     = 0,
+    WEAPON      = 1,
+    ARMOR       = 2,
+    OTHER       = 3, //Accessory
+    MEDICINAL   = 4,
+    STATUS      = 5,
+    CLASS       = 6,
+    MAGIC       = 7
+};
 
 struct ITEM {
     char name[20];
     char zero_padding_0[12];
     
-    int type; //0-7 -> Special, Weapon, Armor, Other, Medicinal, Status, Class, Magic
+    ItemType type;
     int cost;
     char desc[70];
 
     char unk1_0[10];
 
-    byte class_usage[150];
+    byte class_usage[150]; //ids of the classes which are allowed to use this item
 
     char unk2_0[50];
 

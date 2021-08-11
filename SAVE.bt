@@ -1,4 +1,17 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: SAVE.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: SAVE*.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
 
+#include "ObjectData.inc.bt"
 
 typedef struct Character {
 
@@ -73,8 +86,8 @@ typedef struct Character {
     int unk_int21;
     int unk_int22;
 
-    int mvmnt_rules[70];
-    int magic_learned[20];
+    int mvmnt_rules[70];    //Walk levels for geology data 0-69
+    int magic_learned[20];  //IDs of skills/magic learned
     int count_magic_learned;
 
     char unk2_0[36];
@@ -85,60 +98,7 @@ typedef struct ItemHeld {
     int count;
 };
 
-//same type as in SMAP.bt
-typedef struct MovementPattern {
-    short condition;
-    short movement_type; //0-3 -> Rush, Wait, Specific, None
-    short location_X;
-    short location_Y;
-    short switch_to_apply;
-};
-
-//same type as in SMAP.bt
-typedef struct ObjEventCondition {
-    short type;  //Values can mean different things (depends on event_type)
-    short switch_;
-    short turn;  //odd: Ally turn, even: Enemy turn 
-                        //to get the turn count:
-                        // if Ally (odd): add 1, then divide by 2
-                        // if Enemy (even): divide by 2
-    short unit;
-};
-
-//same type as in SMAP.bt
-typedef struct Object {
-    int is_active;
-
-    int pos_x;
-    int pos_y;
-
-    int obj_type;
-    short switch_condition;
-    char unk1_0[2];
-    int unit;
-
-    int other_tile;
-
-    MovementPattern mp_A;
-    MovementPattern mp_B;
-    MovementPattern mp_C;
-    MovementPattern mp_D;
-
-    int enemy_boss;
-    int player_guest;
-    int enemy_item;
-    int enemy_gold;
-
-    ObjEventCondition cond_1;
-    ObjEventCondition cond_2;
-    ObjEventCondition cond_3;
-    ObjEventCondition cond_4;
-    ObjEventCondition cond_5;
-
-    char unk2_0[36];
-    int neutral_healer;
-} object_ <optimize=false>;
-
+//SAVE%d.DAT
 struct SAVE {
     int in_camp;
     int unk_int2;   //I think this one increments with each map change

@@ -1,11 +1,30 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: CLASS.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: CLASS.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
+
+enum <int> MovementType {
+    WALKING     = 0,
+    FLYING      = 1,
+    SPECIAL     = 2
+};
 
 struct CLASS {
     char name[20];
     char zero_padding_0[12];
 
     int mvmnt_speed;
-    int mvmnt_type;         //0 = Walking, 1 = Flying, 2 = Special
-    int mvmnt_rules[70];    //these apply if mvmnt_type eq Special
+    MovementType mvmnt_type;
+    int mvmnt_rules[70];    //Walk levels for geology data 0-69,
+                            //these apply if mvmnt_type eq Special
 
     int img_no;
 

@@ -1,9 +1,48 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: MAGIC.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: MAGIC.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
+
+enum <int> MagicType {
+    DAMAGE          = 0,
+    DEGRADE_STATUS  = 1,
+    RAISE_STATUS    = 2
+};
+
+enum <int> DegradeEffect {
+    POISON      = 0,
+    SLEEP       = 1,
+    ATK_DOWN    = 2,
+    DEF_DOWN    = 3
+};
+
+enum <int> RaiseEffect {
+    RAISE_HP    = 0,
+    RAISE_ATK   = 1,
+    RAISE_DEF   = 2,
+    CURE_POISON = 3,
+    RECOVERY    = 4,
+    ADD_TURN    = 5
+};
+
+enum <int> Target {
+    ANY_UNIT    = 0,
+    ENEMY       = 1
+};
 
 struct MAGIC {
     char name[20];
     char zero_padding_0[12];
 
-    int type;               // 0-2 -> Damage, Degrade Status, Raise Status
+    MagicType type;
     int mp_cost;
 
     char desc[70];
@@ -22,20 +61,19 @@ struct MAGIC {
     char unk4_0[2];
 
     int animation;
-    int degrade_expgain;
-    int degrade_effect;     // 0-3 -> Poison, Sleep, Attack Down, Defense Down
-    int target;             // 0 = Any Unit, 1 = Enemy
-    int power;              //Used for both Degrade & Raise Status
-    int relation;           //Used for both Degrade & Raise Status
-    int raise_effect;       //0-5 -> Raise HP, Raise Attack, Raise Defense, 
-                            //       Detox Poison, Recovery, Add Turn
+    int exp_gain;            // Used for both for Degrade & Raise Status
+    DegradeEffect degrade_effect;
+    Target target;
+    int raise_power;
+    int raise_relation;
+    RaiseEffect raise_effect;
 
     char unk5_0[60];
 
     int range_apply_to_entire_map;
     int area_apply_to_entire_map;
 
-    //2 Bitmaps, each 4 bytes represent one line
+    //2 Bitmaps, Result is 21x21, each 4 bytes represent one line
     //([highest to lowest] byte 1 is empty, then byte 4, 3, 2 follow for each part).
     //HSB of a byte corresponds to the left-most dot of the line part.
     int range_bitmap[21]; 

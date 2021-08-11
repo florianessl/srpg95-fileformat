@@ -1,20 +1,26 @@
 //------------------------------------------------
 //--- 010 Editor v11.0.1 Binary Template
 //
-//      File: MAPNAME.bt
+//      File: GEOLOGY.bt
 //   Authors: Florian Eßl
 //   Version: 
 //   Purpose: SRPG95 File format
 //  Category: Games
-// File Mask: MAPNAME.DAT
+// File Mask: GEOLOGY.DAT
 //  ID Bytes: 
 //   History: https://github.com/florianessl/srpg95-fileformat
 //------------------------------------------------
 
-//Very self explanatory
-//They map to "MAP\SMAP_%03d.DAT" with the number argument 
-// being the index number (starting with 1)
-struct MAPNAME {
-    char name[20];
-    char zero_padding_0[12];
-} mapname[100];
+struct GEOLOGY {
+    char name[16];
+    char zero_padding_0[16];
+    
+    int dense_effect;
+    int hp_change;
+    int mvmnt_change_walking;
+    int mvmnt_change_flying;
+    int mvmnt_change_special;
+    int battle_bg;
+
+    char unk_0[4];
+} geology[70];

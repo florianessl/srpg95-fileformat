@@ -1,0 +1,32 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: GAME.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: GAME.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
+
+enum <int> BattleBackgroundType {
+    SAME_SCREEN_AS_ENEMY = 0,
+    SPLIT_SCREEN         = 1
+};
+
+enum <int> UnitReviveType {
+    REVIVE_ON_NEXT_MAP   = 0,
+    NEVER_REVIVE          = 1
+};
+
+struct GAME {
+    int start_map_id; //zero index
+    BattleBackgroundType bg_type;
+    int counter_atk_enemy;
+    int counter_atk_ally;
+
+    int animation_speed; //100 = slowest, 0 = fastest
+    UnitReviveType revive_type;
+} game;

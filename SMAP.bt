@@ -1,59 +1,20 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: SMAP.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: SMAP_*.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
 
 //TODO: document the different types of EventCommands and their arguments
+//TODO: figure out, how to map SMAP.map_data values to tileset data
 
-//same type as in SAVE.bt
-typedef struct MovementPattern {
-    short condition;
-    short movement_type;  //0-3 -> Rush, Wait, Specific, None
-    short location_X;
-    short location_Y;
-    short switch_to_apply;
-};
-
-//same type as in SAVE.bt
-typedef struct ObjEventCondition {
-    short type;  //Values can mean different things (depends on event_type)
-    short switch_;
-    short turn;  //odd: Ally turn, even: Enemy turn 
-                        //to get the turn count:
-                        // if Ally (odd): add 1, then divide by 2
-                        // if Enemy (even): divide by 2
-    short unit;
-};
-
-//same type as in SAVE.bt
-typedef struct Object {
-    int is_active;
-
-    int pos_x;
-    int pos_y;
-
-    int obj_type;
-    short switch_condition;
-    char unk1_0[2];
-    int unit;
-
-    int other_tile;
-
-    MovementPattern mp_A;
-    MovementPattern mp_B;
-    MovementPattern mp_C;
-    MovementPattern mp_D;
-
-    int enemy_boss;
-    int player_guest;
-    int enemy_item;
-    int enemy_gold;
-
-    ObjEventCondition cond_1;
-    ObjEventCondition cond_2;
-    ObjEventCondition cond_3;
-    ObjEventCondition cond_4;
-    ObjEventCondition cond_5;
-
-    char unk2_0[36];
-    int neutral_healer;
-} object_ <optimize=false>;
+#include "ObjectData.inc.bt"
 
 typedef struct EventDeclaration {
     char internal_name[8];
@@ -61,7 +22,6 @@ typedef struct EventDeclaration {
     int length_data; //The length of an event will be padded to the next 100 
                      // (e.g. 115 -> actually takes 200 bytes of space)
 } eventdeclaration_ <optimize=false>;
-
 
 
 typedef struct EventCommand {
@@ -100,6 +60,7 @@ byte[] ReadEventData(int ev_chunks[], int pos, int padded_size, int current_chun
     return eventData;
 }
 
+//SMAP%03d.DAT
 struct SMAP {
     char name[20];
     char zero_padding_0[12];
@@ -137,14 +98,14 @@ struct SMAP {
     char unk3_0[80];
 
     //Always 40*40 (maximum), even if a smaller map size has been chosen
-    //TODO: figure out, how to map these values to tileset data
     short map_data[1600];
 
     char unk4_0[176];
 
     Object objects[99];
-
-    int ev_chunks[5000]; //stores event chunk adresses. event data is split into chunks of 100 bytes.
+    
+    //Stores event chunk adresses. event data is split into chunks of 100 bytes.
+    int ev_chunks[5000]; 
 
     local int pos<hidden=true>;
     pos = FTell();
@@ -160,6 +121,11 @@ struct SMAP {
     EventDeclaration ev_declarations[5000];
 
     //This marks the end of the static part of the format
+
+    //Event data is read into a local array "events" with the arrays
+    // Event.commands and EventCommand.command_data set to arbitrarily high sizes
+    // (since 010 Binary Template scripting is very limited)
+    //Check "Show local variables" in 010s variable view to see them
     pos = FTell();
 
     local int i <hidden=true>, j<hidden=true>;

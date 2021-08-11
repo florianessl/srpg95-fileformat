@@ -1,0 +1,93 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: ObjectData.inc.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: Used in both SMAP.bt & SAVE.bt
+//  Category: Games
+// File Mask: 
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
+
+enum <short> MovementPatternType {
+    RUSH = 0,
+    WAIT = 1,
+    SPECIFIC = 2,
+    NONE = 3
+};
+
+enum <short> ObjEventConditionType {
+    EXECUTE                         =  0,
+    SWITCH                          =  1,
+    TURN_COUNT                      =  2,
+    UNIT_FIRST_CONTACT              =  4,
+    UNIT_FIRST_CONTACT_AFTER_MVMNT  =  9,
+    UNIT_BEFORE_FIRST_ATTACK        = 10,
+    UNIT_AFTER_FIRST_ATTACK         = 11,
+    UNIT_DIES                       =  5,
+    OTHER_UNIT_PASSES_IT            =  6,
+    OTHER_UNIT_WALKS_ON_IT          =  7,
+    OTHER_WIN_COND_MET              =  8
+};
+
+typedef struct MovementPattern {
+    short condition;        //Index no (0-499) of the switch condition for
+                            // this pattern to be active (only for patterns B-D)
+    MovementPatternType movement_type;    //0-3 -> Rush, Wait, Specific, None
+    short location_X;       //if movement_type eq Specific
+    short location_Y;       //if movement_type eq Specific
+    short switch_to_apply;  //switch to apply when the location is reached
+};
+
+typedef struct ObjEventCondition {
+    ObjEventConditionType type;
+    short condition;  //Index no (0-499) of the switch condition for
+                    // this condition to be active
+    short turn;     //odd: Ally turn, even: Enemy turn 
+                    // to get the turn count:
+                    // - if Ally (odd): add 1, then divide by 2
+                    // - if Enemy (even): divide by 2
+    short unit_id;  //the character (unit) the condition needs to apply to
+};
+
+enum <int> ObjType {
+    ENEMY   = 0,
+    PLAYER  = 1,
+    NEUTRAL = 2,
+    OTHER   = 3
+};
+
+typedef struct Object {
+    int is_active;
+
+    int pos_x;
+    int pos_y;
+
+    ObjType type;
+    short switch_condition; //Object will be deleted if this switch is OFF
+    char unk1_0[2];
+    int unit_id;
+
+    int other_tile;         // if type eq "Other"
+
+    MovementPattern mp_A;
+    MovementPattern mp_B;
+    MovementPattern mp_C;
+    MovementPattern mp_D;
+
+    int enemy_boss;
+    int player_guest;       // Wrongly translated "MainCh" in Holbert's version
+    int enemy_item;
+    int enemy_gold;
+
+    ObjEventCondition cond_1;
+    ObjEventCondition cond_2;
+    ObjEventCondition cond_3;
+    ObjEventCondition cond_4;
+    ObjEventCondition cond_5;
+
+    char unk2_0[36];
+    int neutral_healer;     // Wrongly translated "Don't get Hurt" in Holbert's version
+} object_ <optimize=false>;

@@ -1,12 +1,24 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: MAGIC.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: UNIT.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
 
 struct UNIT {
     char name[20];
     char zero_padding_0[12];
 
-    int face;           //index starts at 1
-    int class;
-    int level;
-    int exp;
+    int face;           //maps to BMP/FACE_%03d.BMP
+    int class_id;
+    int level_start;
+    int exp_start;
 
     //Stats
     int hp_start;

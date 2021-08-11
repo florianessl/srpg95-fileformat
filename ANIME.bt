@@ -1,0 +1,53 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: ANIME.bt
+//   Authors: Florian Eßl
+//   Version: 
+//   Purpose: SRPG95 File format
+//  Category: Games
+// File Mask: ANIME.DAT
+//  ID Bytes: 
+//   History: https://github.com/florianessl/srpg95-fileformat
+//------------------------------------------------
+
+//Maps to BMPs: BMP/CA%02d_%03d.BMP & BMP/MAGA_%03d.BMP
+
+struct Frame  {
+    short x_1;
+    short y_1;
+    short a_1;  //1: active, -1: deleted
+    short x_2;
+    short y_2;
+    short a_2;  //1: active, -1: deleted
+    short x_3;
+    short y_3;
+    short a_3;  //1: active, -1: deleted
+    short x_4;
+    short y_4;
+    short a_4;  //1: active, -1: deleted
+};
+
+struct ANIME {
+    char name[20];
+    char zero_padding_0[12];
+
+    char unk1_0[4];
+    int curr_class_graphic;
+
+    Frame frames[90];
+    
+    int frame_amount;
+    int frame_hit;      //zero-indexed
+    int frame_miss;     //not zero-indexed ?
+    char unk2_0[28];
+
+    char sfx_hit[48];
+    char sfx_miss[48];
+    int timing_hit;     //+1
+    int timing_miss;    //+1
+    char unk3_0[56];
+};
+
+ANIME anime_chars[80];
+ANIME anime_magic[80];

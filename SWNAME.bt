@@ -1,20 +1,19 @@
 //------------------------------------------------
 //--- 010 Editor v11.0.1 Binary Template
 //
-//      File: MAPNAME.bt
+//      File: SWNAME.bt
 //   Authors: Florian Eßl
 //   Version: 
 //   Purpose: SRPG95 File format
 //  Category: Games
-// File Mask: MAPNAME.DAT
+// File Mask: SWNAME.DAT
 //  ID Bytes: 
 //   History: https://github.com/florianessl/srpg95-fileformat
 //------------------------------------------------
 
 //Very self explanatory
-//They map to "MAP\SMAP_%03d.DAT" with the number argument 
-// being the index number (starting with 1)
-struct MAPNAME {
+//Names of all switches
+struct SWNAME {
     char name[20];
     char zero_padding_0[12];
-} mapname[100];
+} swname[500];
