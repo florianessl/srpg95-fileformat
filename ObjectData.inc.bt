@@ -88,6 +88,6 @@ typedef struct Object {
     ObjEventCondition cond_4;
     ObjEventCondition cond_5;
 
-    char unk2_0[36];
+    char unk2[36];
     int neutral_healer;     // Wrongly translated "Don't get Hurt" in Holbert's version
 } object_ <optimize=false>;

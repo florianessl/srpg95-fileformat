@@ -18,9 +18,11 @@ typedef struct Unit {
     int is_active;
     int is_alive;
 
-    int played_this_turn;       //has already moved
+    int played_this_turn;   //has already moved
     int is_foe;
-    int unk_int3;
+    int unk_int1;           //I think this one is used as some sort of index variable in-game
+                            // for moving around units when they get added/removed/revived
+                            //Shouldn't matter for savegames
     int pos_x;
     int pos_y;
     int obj_index;
@@ -29,13 +31,14 @@ typedef struct Unit {
     int class_id;
     int level;
     int exp;
-    int unk_int4;
-    int unk_int5;
-    int count_held_items;
+    int add_turn_used;  //If magic of type "ADD_TURN" was already used. (Only possible once per unit & turn)
+    int is_in_team;     //While in camp, this value sets if the character is currently 
+                        //selected as a team member
+    int is_guest;
     int controlled_by_cpu;
     int npc_must_stay_alive;
-    int unk_int7;
-    int unk_int8;
+    int unused_int1;    //seems unused
+    int unused_int2;    //seems unused
     int walk_speed;
 
     int hp_max;
@@ -57,40 +60,41 @@ typedef struct Unit {
     int def_phys;
     int def_magic;
 
-    int unk_int9;
-    int unk_int10;
-    int unk_int11;
-    int unk_int12;
+    int atk_modifier;   //ATK can be affected by Raise & Degradation magics
+    int def_modifier;   //DEF can be affected by Raise & Degradation magics
+    int unused_int3;    //This one looks like it was supposed to play a similar role as 
+                        // the previous 2 values but it is seems unused
+    int unused_int4;    //seems unused
 
     int item_weapon;
     int item_armor;
     int item_other;
 
-    int unk_int13;
-    int unk_int14;
+    int weapon_range_low;
+    int weapon_range_high;
     int stat_poison_rounds;
     int stat_sleep_rounds;
     int stat_atkdown_rounds;
     int stat_defdown_rounds;
 
-    //TODO: Several of these are set after movement. Still have to figure them out
-    int unk_int15;
+    //These seem to be used for in-game-movement and are not relevant for savegames
+    int unused_int5;    //unused
     int mvmnt_unused;   //after movement, how many steps were unused
-    int unk_int16;
-    int unk_int17;
-    int unk_int18;
+    int unk_int2;       //16, 17, 18 seem to be used while in-game-movement is active
+    int unk_int3;       // but are reset when done
+    int unk_int4;
     int prev_pos_x;     //only set if the character has already moved
     int prev_pos_y;     //only set if the character has already moved
-    int unk_int19;
-    int unk_int20;
-    int unk_int21;
-    int unk_int22;
+    int unk_int5;       //a unit_id, probably another unit this one is currently facing
+    int unused_int6;    //seems unused
+    int unused_int7;    //seems unused
+    int unused_int8;    //seems unused
 
     int mvmnt_rules[70];    //Walk levels for geology data 0-69
     int magic_learned[20];  //IDs of skills/magic learned
     int count_magic_learned;
 
-    char unk2[36];
+    char unk2[36];      //probably used for movement & routing
 };
 
 typedef struct ItemHeld {
@@ -106,7 +110,7 @@ typedef struct GameData {
     int next_map_id;
     byte switches[500]; //Yup, one byte for each switch
 
-    int unk_int5;
+    int unk_int1;
     int turn_no;        //counts Ally & Enemy turns
     ItemHeld items[100];
 
@@ -120,7 +124,7 @@ typedef struct GameData {
     int colortint_green;
     int colortint_blue;
     int colortint_chroma;
-    int unk_int11;
+    int unk_int2;
     
     char unk3_0[92];
     short variables[200];
